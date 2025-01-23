@@ -33,7 +33,7 @@ import userRoutes from "./routes/userRoutes.js";
 app.use("/api/user", userRoutes);
 // app.use("/api/pin", pinRoutes);
 
-
+app.get('/',)
 
 
 app.listen(port, () => {
