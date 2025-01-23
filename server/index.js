@@ -23,6 +23,8 @@ app.use(express.json());
 app.get('/', function (req, res) {
   res.send('Hello World')
 });
+
+
 // app.use(cookieParser());
 // app.get('/', function (req, res) {
 //   res.send('Hello World');
@@ -35,8 +37,6 @@ import userRoutes from "./routes/userRoutes.js";
 // routes
 app.use("/api/user", userRoutes);
 // app.use("/api/pin", pinRoutes);
-
-app.get('/',)
 
 
 app.listen(port, () => {
