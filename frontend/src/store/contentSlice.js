@@ -4,14 +4,14 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Helper for API URLs
-const API_BASE_URL = 'http://localhost:3000/api/user';
+const API_BASE_URL = 'https://todo-project-server-phi.vercel.app/api/user';
 
 // Thunk to create a new user
 export const createUser = createAsyncThunk(
   'content/createUser',
   async (formData, thunkAPI) => {
     try {
-      const response = await axios.post('http://localhost:3000/api/user/newuser', formData);
+      const response = await axios.post(`${API_BASE_URL}/newuser`, formData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');

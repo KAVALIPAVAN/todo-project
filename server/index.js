@@ -14,12 +14,15 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
+    origin: 'https://todo-project-frontend-flame.vercel.app/', // Allow requests from this origin
   })
 );
 // middlewares
 app.use(express.json());
 
+app.get('/', function (req, res) {
+  res.send('Hello World')
+});
 // app.use(cookieParser());
 // app.get('/', function (req, res) {
 //   res.send('Hello World');
