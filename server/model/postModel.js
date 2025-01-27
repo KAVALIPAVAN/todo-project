@@ -13,9 +13,8 @@ const postSchema = new mongoose.Schema({
     trim: true,
   },
   status: {
-    type: String,
-    enum: [true,false],
-    default: false,
+    type: Boolean,
+    default: false, // Default value set to false
   },
   priority: {
     type: String,

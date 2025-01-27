@@ -17,7 +17,6 @@ const newUser = await User.create({
     image:fileUrl.content,
   });
   await newUser.save();
-//   const userWithoutImage = await User.findById(newUser._id).select("-image");
   res.json({
     message: "user Created",
     user: newUser,
@@ -60,6 +59,29 @@ export const createPost = async (req, res) => {
     }
   };
 
+  export const loginUser = TryCatch(async (req, res) => {
+    const { email } = req.body;
+  
+    // Check if email is provided
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+  
+    // Find the user by email
+    const user = await User.findOne({ email });
+  
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+  
+    // Return the user details
+    res.status(200).json({
+      message: "Login successful",
+      user,
+    });
+  });
+  
+
 
   export const getUserPosts = async (req, res) => {
     try {
@@ -100,11 +122,12 @@ export const createPost = async (req, res) => {
     }
   };
 
-  export const updatePost = async (req, res) => {
+
+export const updatePost = async (req, res) => {
   try {
     const postId = req.params.id;
-    const updates = req.body;
-
+    const updates = req.body;  // Form data will be in req.body
+    
     if (!Object.keys(updates).length) {
       return res.status(400).json({ message: 'No fields provided for update' });
     }
@@ -126,6 +149,7 @@ export const createPost = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
   export const deletePost = async (req, res) => {

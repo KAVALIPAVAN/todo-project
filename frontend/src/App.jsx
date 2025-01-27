@@ -156,7 +156,7 @@
 
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SignupPage from '../pages/SignUp';
+import SignupPage from './SignUp';
 import MainApp from './MainApp';
 
 function App() {

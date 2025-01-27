@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Helper for API URLs
-const API_BASE_URL = 'https://todo-project-server-phi.vercel.app/api/user';
+const API_BASE_URL = 'http://localhost:3000/api/user';
 
 // Thunk to create a new user
 export const createUser = createAsyncThunk(
@@ -12,6 +12,18 @@ export const createUser = createAsyncThunk(
   async (formData, thunkAPI) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/newuser`, formData);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');
+    }
+  }
+);
+
+export const loginUser = createAsyncThunk(
+  'content/loginUser',
+  async (Data, thunkAPI) => {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/login`, Data);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');
@@ -120,6 +132,22 @@ const contentSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload;
       })
+
+      .addCase(loginUser.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.successMessage = 'User loggedin successfully!';
+        state.user = action.payload.user;
+        state.userId = action.payload.user._id;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+
       .addCase(createPost.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.successMessage = 'Post created successfully!';
