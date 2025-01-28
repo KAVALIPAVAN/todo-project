@@ -215,7 +215,7 @@ const MainApp = () => {
         <div className="flex gap-4 items-center">
           <CiSearch className=" text-xl md:text-2xl cursor-pointer" />
           <IoGridOutline className="text-xl md:text-2xl cursor-pointer" />
-         // <BsMoonStarsFill className=" text-xl md:text-2xl cursor-pointer" />
+          {/*<BsMoonStarsFill className=" text-xl md:text-2xl cursor-pointer" /> */}
         </div>
       </div>
 
