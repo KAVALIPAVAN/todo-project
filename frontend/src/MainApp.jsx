@@ -241,7 +241,7 @@ const MainApp = () => {
                 setActiveIndex(0);
                 setAllPosts(posts);
               }} className={`flex hover:bg-[#EEF6EF] items-center gap-2 p-1 cursor-pointer ${activeIndex === 0 ? "bg-[#EEF6EF]" : ""} `}>
-                <img src="../public/menu.png" alt="" /> All Tasks
+                <img src="/menu.png" alt="" /> All Tasks
               </li>
 
 
