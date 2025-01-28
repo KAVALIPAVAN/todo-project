@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useState } from 'react';
 
 // Helper for API URLs
-const API_BASE_URL = 'http://localhost:3000/api/user';
+const API_BASE_URL = 'https://todo-project-server-cesb.onrender.com/api/user';
 
 
 // Thunk to create a new user

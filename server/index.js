@@ -5,7 +5,7 @@ import cors from 'cors';
 
 
 dotenv.config();
-
+//export const maxDuration = 50;
 
 const app = express();
 
@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
+    origin: 'https://todo-project-frontend-flame.vercel.app', // Allow requests from this origin
   })
 );
 
