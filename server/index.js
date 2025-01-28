@@ -5,7 +5,7 @@ import cors from 'cors';
 
 
 dotenv.config();
-//export const maxDuration = 50;
+export const maxDuration = 50;
 
 const app = express();
 
