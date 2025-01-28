@@ -3,6 +3,8 @@ import {Post} from "../model/postModel.js";
 import TryCatch from '../middleware/TryCatch.js'
 import getDataUrl from "../controllers/urlGenerator.js";
 
+export const maxDuration=50;
+
 export const createUser = TryCatch(async (req, res) => {
   const { name,email } = req.body;
 
