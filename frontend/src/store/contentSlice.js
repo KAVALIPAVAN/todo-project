@@ -2,9 +2,11 @@
 // contentSlice.js
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useState } from 'react';
 
 // Helper for API URLs
 const API_BASE_URL = 'http://localhost:3000/api/user';
+
 
 // Thunk to create a new user
 export const createUser = createAsyncThunk(
@@ -107,7 +109,10 @@ const initialState = {
   successMessage: null,
 };
 
+
+
 const contentSlice = createSlice({
+  
   name: 'content',
   initialState,
   reducers: {
@@ -156,6 +161,7 @@ const contentSlice = createSlice({
       .addCase(getUserPosts.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.posts = action.payload.user.posts;
+        // setallposts(action.payload.user.posts);
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = 'succeeded';

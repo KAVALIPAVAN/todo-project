@@ -7,6 +7,7 @@ import { MdCheckBox } from "react-icons/md";
 import { BsMoonStarsFill } from "react-icons/bs";
 import { FiMap } from "react-icons/fi";
 import { IoGridOutline } from "react-icons/io5";
+import logo from '/logo.png';
 import { IoIosAdd } from "react-icons/io";
 import { IoIosInformationCircle } from "react-icons/io";
 import { CiBellOn } from "react-icons/ci";
@@ -39,8 +40,9 @@ const MainApp = () => {
   const [isDropdownOpenthree, setIsDropdownOpenthree] = useState(false);
   const { user, userId, posts, status, error } = useSelector((state) => state.content);
   const [date, setDate] = useState('');
-  const [allPosts, setAllPosts] = useState();
- 
+  const [allPosts,  setAllPosts] = useState(posts);
+  const [data, setdata] = useState(false);
+
 
   const dataChart = [
     ["status", "items"],
@@ -66,22 +68,21 @@ const MainApp = () => {
 
   const handleUpdateTask = () => {
 
-
     if (selectedTaskId) {
       const updates = { ...taskDetails };
       dispatch(updatePost({ postId: selectedTaskId, updates }));
       dispatch(getUserPosts(userId));
       setTaskDetails({ taskName: '', priority: 'low', dueDate: '', remainder: '', repeat: 'none', status: false });
       setSidebarVisible(false);
-
     }
+    setdata(false);
   };
 
   useEffect(() => {
     if (userId) {
       dispatch(getUserPosts(userId));
+      setdata(false);
     }
-    setAllPosts(posts);
   }, [userId, dispatch]);
   
   const handleTaskClick = (post) => {
@@ -162,6 +163,7 @@ const MainApp = () => {
     const postData = { ...taskDetails, user: userId };
     dispatch(createPost(postData));
     setTaskDetails({ taskName: '', priority: 'low', dueDate: '', remainder: '', repeat: 'none', status: false });
+    setdata(false);
   };
 
   const handletodaydata = () => {
@@ -174,18 +176,21 @@ const MainApp = () => {
     });
 
     setAllPosts(postsCreatedToday);
+    setdata(true);
   };
 
   const handleImportant = () => {
     const importantPosts = posts.filter(post => post.priority === 'high');
 
     setAllPosts(importantPosts);
+    setdata(true);
   }
 
   const handleplanned = () => {
     const importantPosts = posts.filter(post => post.status === false);
 
     setAllPosts(importantPosts);
+    setdata(true);
   }
 
 
@@ -193,6 +198,7 @@ const MainApp = () => {
     dispatch(deletePost(postId));
     setTaskDetails({ taskName: '', priority: 'low', dueDate: '', remainder: '', repeat: 'none', status: false });
     setAllPosts(posts);
+    setdata(false);
   };
 
   return (<>
@@ -203,7 +209,7 @@ const MainApp = () => {
       <div className="p-3 flex justify-between mb-4">
         <div className="flex gap-4 items-center">
           <IoMenu onClick={() => setFirst(!first)} className="md:text-2xl cursor-pointer" />
-          <img className=' w-1/2 md:w-full' src="../public/logo.png" alt="Logo" />
+          <img className=' w-1/2 md:w-full' src={logo} alt="Logo" />
         </div>
 
         <div className="flex gap-4 items-center">
@@ -316,19 +322,11 @@ const MainApp = () => {
 
                   <div onClick={handleClickthree} className="">
                     <CiBellOn className='text-xl' />
-                    <div className=" ">
-                      <DatePicker
-                        selected={taskDetails.remainder}
-                        onChange={(date) => handleDateChange('remainder', date)} className=" hidden" ref={inputRefthree} />
-                    </div>
                   </div>
 
                   <div onClick={handleClickfour} className="   ">
                     <CiCalendar className='text-xl' />
-                    <div className=""><DatePicker
-                      selected={taskDetails.dueDate}
-                      onChange={(date) => handleDateChange('dueDate', date)}
-                      className='hidden' ref={inputReffour} /></div>
+                    
                   </div>
 
                   <div onClick={() => { setIsDropdownOpenthree(!isDropdownOpenthree) }} className=" cursor-pointer">
@@ -366,6 +364,17 @@ const MainApp = () => {
 
           </div>
 
+          <div className="  ">
+                      <DatePicker
+                        selected={taskDetails.remainder}
+                        onChange={(date) => handleDateChange('remainder', date)} className="ml-32 hidden" ref={inputRefthree} />
+                    </div>
+
+                    <div className=""><DatePicker
+                      selected={taskDetails.dueDate}
+                      onChange={(date) => handleDateChange('dueDate', date)}
+                      className='hidden' ref={inputReffour} />
+                      </div>
 
                 </div>
                 <button
@@ -379,7 +388,7 @@ const MainApp = () => {
 
             {status === 'loading' && <p>Loading...</p>}
             {error && <p className="text-red-500">{error}</p>}
-            {allPosts?(allPosts?.filter((post) => !post.status).map((post, index) => (
+            {((data ? allPosts:posts).filter((post) => !post.status).map((post, index) => (
               <div
                 key={`${post._id}-${index}`} onClick={() => {
 
@@ -401,34 +410,10 @@ const MainApp = () => {
                   }
 
                 </div>
-
-              </div>
-            ))):(posts.filter((post) => !post.status).map((post, index) => (
-              <div
-                key={`${post._id}-${index}`} onClick={() => {
-
-                  setSidebarVisible(true);
-                  handleTaskClick(post);
-                  setDate(post.updatedAt);
-                }}
-                className={`flex  justify-between  border-t-2 p-3 cursor-pointer `}
-              >
-                <div className={`items-center  flex  h-full w-full gap-1 ${post.status && 'line-through'} flex`}>
-                  <div className="">{!post.status ? <MdOutlineCheckBoxOutlineBlank /> :
-                    <MdCheckBox />}</div>
-                  {post.taskName}
-                </div>
-                <div className="">
-                  {post.priority === "high" ? <FaStar /> : <CiStar
-                    className="text-2xl "
-                  />
-                  }
-
-                </div>
-
+                
               </div>
             )))}
-            {allPosts?.filter((post) => post.status).map((post, index) => (
+            {(data?allPosts:posts)?.filter((post) => post.status).map((post, index) => (
               <div
                 key={`${post._id}-${index}`} onClick={() => {
                   setSidebarVisible(true);
