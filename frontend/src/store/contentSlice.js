@@ -4,7 +4,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 // Helper for API URLs
-const API_BASE_URL = 'https://todo-project-server-cesb.onrender.com';
+const API_BASE_URL = 'https://todo-project-server-cesb.onrender.com/api/user';
 
 // Thunk to create a new user
 export const createUser = createAsyncThunk(
