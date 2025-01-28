@@ -14,7 +14,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: 'https://todo-project-frontend-git-main-pavans-projects-ccc36420.vercel.app', // Allow requests from this origin
+    origin: 'https://todo-project-frontend-flame.vercel.app', // Allow requests from this origin
   })
 );
 
