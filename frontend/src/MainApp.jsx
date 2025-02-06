@@ -225,12 +225,13 @@ const MainApp = () => {
       <div className="p-3 flex justify-between mb-4">
         <div className="flex gap-4 items-center">
           <IoMenu onClick={() => setFirst(!first)} className="md:text-2xl cursor-pointer" />
-          <img className=' w-1/2 md:w-full' src="../public/logo.png" alt="Logo" />
+          <img className=' w-1/2 md:w-full' src="/logo.png" alt="Logo" />
         </div>
 
-        <div className="flex gap-4 items-center relative">
-          <IoGridOutline onClick={()=>{setlogout(!logout)}}  className="text-xl md:text-2xl cursor-pointer" />
-          <div onClick={()=>{handleLogout()}} className={`hover:cursor-pointer absolute top-8 ${!logout?'hidden':'block'} right-0 bg-[#bfe1c3] p-1 rounded-md `} >Logout</div>
+        <div className="flex gap-4 items-center">
+          <CiSearch className=" text-xl md:text-2xl cursor-pointer" />
+          <IoGridOutline className="text-xl md:text-2xl cursor-pointer" />
+          <BsMoonStarsFill className=" text-xl md:text-2xl cursor-pointer" />
         </div>
       </div>
 
