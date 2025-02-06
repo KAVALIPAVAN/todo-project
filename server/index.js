@@ -14,7 +14,7 @@ const port = process.env.PORT;
 
 app.use(
   cors({
-    origin: 'http://localhost:5173', // Allow requests from this origin
+    origin: 'https://todo-project-frontend-flame.vercel.app', // Allow requests from this origin
     credentials: true,
   })
 );
