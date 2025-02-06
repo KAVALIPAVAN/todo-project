@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createPost, getUserPosts, updatePost, deletePost } from './store/contentSlice';
 import { IoMenu } from "react-icons/io5";
 import { CiCalendar, CiSearch, CiStar } from "react-icons/ci";
 import { MdCheckBox } from "react-icons/md";
@@ -23,6 +22,9 @@ import "react-datepicker/dist/react-datepicker.css"; // import the styles
 
 import { Chart } from "react-google-charts";
 
+import { createPost, getUserPosts, updatePost, deletePost, fetchUser, loginUser, logoutUser } from './store/contentSlice';
+import { useNavigate } from 'react-router-dom';
+
 
 const MainApp = () => {
   const [first, setFirst] = useState(true);
@@ -42,6 +44,8 @@ const MainApp = () => {
   const [date, setDate] = useState('');
   const [allPosts,  setAllPosts] = useState(posts);
   const [data, setdata] = useState(false);
+  const [logout, setlogout] = useState(false);
+  const navigate=useNavigate();
 
 
   const dataChart = [
@@ -64,6 +68,8 @@ const MainApp = () => {
   };
 
 
+ 
+  
 
 
   const handleUpdateTask = () => {
@@ -84,6 +90,15 @@ const MainApp = () => {
       setdata(false);
     }
   }, [userId, dispatch]);
+
+  useEffect(()=>{
+    dispatch(fetchUser());
+  },[]);
+
+  const handleLogout = () => {
+    dispatch(logoutUser()) // ✅ Correct thunk to log out the user
+    navigate('/')
+  };
   
   const handleTaskClick = (post) => {
 
@@ -200,7 +215,8 @@ const MainApp = () => {
     setAllPosts(posts);
     setdata(false);
   };
-
+  
+ 
   return (<>
     {userId ? (
       <div className="h-screen ">
@@ -212,10 +228,9 @@ const MainApp = () => {
           <img className=' w-1/2 md:w-full' src="../public/logo.png" alt="Logo" />
         </div>
 
-        <div className="flex gap-4 items-center">
-          <CiSearch className=" text-xl md:text-2xl cursor-pointer" />
-          <IoGridOutline className="text-xl md:text-2xl cursor-pointer" />
-          <BsMoonStarsFill className=" text-xl md:text-2xl cursor-pointer" />
+        <div className="flex gap-4 items-center relative">
+          <IoGridOutline onClick={()=>{setlogout(!logout)}}  className="text-xl md:text-2xl cursor-pointer" />
+          <div onClick={()=>{handleLogout()}} className={`hover:cursor-pointer absolute top-8 ${!logout?'hidden':'block'} right-0 bg-[#bfe1c3] p-1 rounded-md `} >Logout</div>
         </div>
       </div>
 
@@ -241,7 +256,7 @@ const MainApp = () => {
                 setActiveIndex(0);
                 setAllPosts(posts);
               }} className={`flex hover:bg-[#EEF6EF] items-center gap-2 p-1 cursor-pointer ${activeIndex === 0 ? "bg-[#EEF6EF]" : ""} `}>
-                <img src="../public/menu.png" alt="" /> All Tasks
+                <img src="/menu.png" alt="" /> All Tasks
               </li>
 
 

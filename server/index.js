@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDb from "./db.js";
 import cors from 'cors';
-
+import cookieParser from "cookie-parser"; 
 
 dotenv.config();
 //export const maxDuration = 50;
@@ -10,17 +10,20 @@ dotenv.config();
 const app = express();
 
 const port = process.env.PORT;
-app.use(cors());
+// app.use(cors());
 
 app.use(
   cors({
     origin: 'https://todo-project-frontend-flame.vercel.app', // Allow requests from this origin
+    credentials: true,
   })
 );
+
 
 // middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
+app.use(cookieParser());
 
 app.get('/', function (req, res) {
   res.send('Hello World')

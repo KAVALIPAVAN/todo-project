@@ -2,6 +2,7 @@ import User from "../model/userModel.js";
 import {Post} from "../model/postModel.js";
 import TryCatch from '../middleware/TryCatch.js'
 import getDataUrl from "../controllers/urlGenerator.js";
+import generateToken from "../middleware/generatorToken.js";
 
 //export const maxDuration=50;
 
@@ -19,6 +20,7 @@ const newUser = await User.create({
     image:fileUrl.content,
   });
   await newUser.save();
+  generateToken(newUser._id, res);
   res.json({
     message: "user Created",
     user: newUser,
@@ -75,7 +77,7 @@ export const createPost = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-  
+    generateToken(user._id, res);
     // Return the user details
     res.status(200).json({
       message: "Login successful",
@@ -83,7 +85,11 @@ export const createPost = async (req, res) => {
     });
   });
   
-
+  export const myProfile = TryCatch(async (req, res) => {
+    // console.log(req.user._id)
+    const user = await User.findById(req.user._id);
+    res.json(user);
+  });
 
   export const getUserPosts = async (req, res) => {
     try {
@@ -152,8 +158,6 @@ export const updatePost = async (req, res) => {
   }
 };
 
-
-
   export const deletePost = async (req, res) => {
     try {
       // Get the post ID from the URL parameters
@@ -175,3 +179,21 @@ export const updatePost = async (req, res) => {
     }
   };
 
+ 
+  export const logOutUser = async (req, res) => {
+    try {
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: true, // Keep this `true` in production (use `false` for local testing)
+        sameSite: "None",
+      });
+
+      return res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+};
+
+
+  
