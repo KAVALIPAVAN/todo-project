@@ -225,7 +225,7 @@ const MainApp = () => {
       <div className="p-3 flex justify-between mb-4">
         <div className="flex gap-4 items-center">
           <IoMenu onClick={() => setFirst(!first)} className="md:text-2xl cursor-pointer" />
-          <img className=' w-1/2 md:w-full' src="../public/logo.png" alt="Logo" />
+          <img className=' w-1/2 md:w-full' src="/logo.png" alt="Logo" />
         </div>
 
         <div className="flex gap-4 items-center relative">
@@ -286,7 +286,7 @@ const MainApp = () => {
                 setActiveIndex(4);
                 setAllPosts(posts);
               }} className={`flex hover:bg-[#EEF6EF] items-center gap-2 p-1 cursor-pointer ${activeIndex === 4 ? "bg-[#EEF6EF]" : ""} `}>
-                <img src="../public/clock.png" alt="" /> Assigned to me
+                <img src="/clock.png" alt="" /> Assigned to me
               </li>
 
             </div>
