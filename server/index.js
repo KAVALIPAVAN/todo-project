@@ -14,12 +14,13 @@ const port = process.env.PORT;
 
 app.use(
   cors({
-    origin: 'https://todo-project-frontend-flame.vercel.app', // Allow requests from this origin
-    credentials: true,
+    origin: "https://todo-project-frontend-flame.vercel.app", // Your frontend URL
+    credentials: true, // ✅ Required for cookies
     methods: "GET,POST,PUT,DELETE",
     allowedHeaders: "Content-Type,Authorization",
   })
 );
+
 
 
 // middlewares
