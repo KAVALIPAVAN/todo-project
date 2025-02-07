@@ -93,7 +93,7 @@ const MainApp = () => {
 
   useEffect(()=>{
     dispatch(fetchUser());
-  },[]);
+  },[dispatch]);
 
   const handleLogout = () => {
     dispatch(logoutUser()) // ✅ Correct thunk to log out the user

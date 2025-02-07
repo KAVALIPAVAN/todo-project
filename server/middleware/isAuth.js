@@ -1,66 +1,31 @@
-// import jwt from "jsonwebtoken";
-// import User from "../model/userModel.js";
-
-// export const isAuth = async (req, res, next) => {
-//   try {
-//     const token = req.cookies.token;
-//     console.log(req.cookies.token);
-//     if (!token)
-//       return res.status(403).json({
-//         message: "Please Login",
-//       });
-
-//     const decodedData = jwt.verify(token, process.env.JWT_SEC);
-
-//     if (!decodedData)
-//       return res.status(403).json({
-//         message: "token expired",
-//       });
-
-//     req.user = await User.findById(decodedData.id);
-
-//     next();
-//   } catch (error) {
-//     res.status(500).json({
-//       message: "Please Login",
-//     });
-//   }
-// };
-
-import jwt from "jsonwebtoken";
-import User from "../model/userModel.js";
-
 export const isAuth = async (req, res, next) => {
   try {
-    const token = req.cookies.token; // Retrieve token from cookies
-    // console.log("Token from cookies:", token); // Log the token for debugging
-
+    const token = req.cookies.token; 
     if (!token) {
-      return res.status(403).json({
-        message: "Please Login",
-      });
+      return res.status(401).json({ message: "Unauthorized, Please Login" });
     }
-
 
     const decodedData = jwt.verify(token, process.env.JWT_SEC);
 
     if (!decodedData || !decodedData.id) {
-      return res.status(403).json({
-        message: "Token expired or invalid",
+      res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        path: "/",
       });
+
+      return res.status(401).json({ message: "Session expired, please login again" });
     }
 
     req.user = await User.findById(decodedData.id);
     if (!req.user) {
-      return res.status(404).json({
-        message: "User  not found",
-      });
+      return res.status(404).json({ message: "User not found" });
     }
-    next(); // Proceed to the next middleware or route handler
+
+    next();
   } catch (error) {
-    console.error("Authentication error:", error); // Log the error for debugging
-    res.status(500).json({
-      message: "Internal server error. Please try again later.",
-    });
+    res.clearCookie("token");
+    res.status(500).json({ message: "Invalid Token, Please login again" });
   }
 };
