@@ -14,7 +14,7 @@ const port = process.env.PORT;
 
 app.use(
   cors({
-    origin: "https://todo-project-frontend-flame.vercel.app", // Your frontend URL
+    origin: process.env.Frontend, // Your frontend URL
     credentials: true, // ✅ Required for cookies
   })
 );
