@@ -16,8 +16,6 @@ app.use(
   cors({
     origin: "https://todo-project-frontend-flame.vercel.app", // Your frontend URL
     credentials: true, // ✅ Required for cookies
-    methods: "GET,POST,PUT,DELETE",
-    allowedHeaders: "Content-Type,Authorization",
   })
 );
 
