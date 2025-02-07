@@ -1,5 +1,4 @@
 import express from "express";
-// import uploadFile from "../middlewares/multer.js";
 import uploadFile from "../middleware/multer.js";
 import { createPost, createUser, deletePost, getSinglePost, getUserPosts, loginUser, logOutUser, myProfile, updatePost } from "../controllers/userController.js";
 import { isAuth } from "../middleware/isAuth.js";
