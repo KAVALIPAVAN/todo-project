@@ -456,7 +456,7 @@ const MainApp = () => {
         </section>
 
         {/* right sidebar */}
-        <section className={`bg-[#EEF6EF] p-2 ${!sidebarVisible && 'opacity-0 h-0 w-0 hidden'} transition-all duration-500 ease-in-out  h-full  overflow-hidden  lg:w-[25%]`}>
+        <section className={`bg-[#EEF6EF] p-2 ${!sidebarVisible && 'opacity-0 h-0 w-0 hidden'} transition-all duration-500 ease-in-out  h-full  overflow-hidden mx-auto lg:w-[25%]`}>
           <div className="flex justify-between mt-11 ml-4 border-t-2 p-4  ">
             <div className="items-center text-center gap-2 flex">
               <div onClick={() => {
@@ -573,7 +573,7 @@ const MainApp = () => {
           <div className=" ml-4 border-t-2 p-3  ">
             <h3 className='ml-8 text-gray-500 hidden md:block'>Add Notes</h3>
           </div>
-          <div className="  flex md:justify-end p-2 ml-4"><button onClick={handleUpdateTask} className='bg-[#f0852d] flex justify-center  rounded-lg sm:text-xs md:text-base  md:p-2 '>update</button></div>
+          <div className="  flex md:justify-end p-2 ml-4"><button onClick={handleUpdateTask} className='bg-[#f0852d] flex justify-center p-1  rounded-lg sm:text-xs md:text-base  md:p-2 '>update</button></div>
 
           <div className="flex h-full bottom-0 w-full align-middle gap-2 justify-between mt-24 ml-4 border-t-2 p-4 text-gray-500 ">
 

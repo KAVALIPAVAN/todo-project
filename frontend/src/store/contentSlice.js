@@ -16,6 +16,8 @@ export const createUser = createAsyncThunk(
       const response = await axios.post(`${API_BASE_URL}/newuser`, formData,{
         withCredentials: true,
       });
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');
@@ -28,35 +30,45 @@ export const loginUser = createAsyncThunk(
   async (Data, thunkAPI) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/login`, Data,{ withCredentials: true});
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');
     }
   }
 );
+
+const authAxios = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+authAxios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("authToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => Promise.reject(error));
 
 export const fetchUser = createAsyncThunk(
-  'content/fetchUser',
-  async (thunkAPI) => {
+  "content/fetchUser",
+  async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/user`,{
-        withCredentials: true,
-      });
+      const response = await authAxios.get("/user");
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || 'An error occurred.');
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "An error occurred.");
     }
   }
 );
 
-// Thunk to create a new post
+
 export const createPost = createAsyncThunk(
   'content/createPost',
   async (postData, thunkAPI) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/newpost`, postData,{
-        withCredentials: true,
-      });
+      const response = await authAxios.post(`${API_BASE_URL}/newpost`, postData);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -64,14 +76,12 @@ export const createPost = createAsyncThunk(
   }
 );
 
-// Thunk to fetch all posts of a user
+
 export const getUserPosts = createAsyncThunk(
   'content/getUserPosts',
   async (userId, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/${userId}`,{
-        withCredentials: true,
-      });
+      const response = await authAxios.get(`${API_BASE_URL}/${userId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -79,14 +89,12 @@ export const getUserPosts = createAsyncThunk(
   }
 );
 
-// Thunk to fetch a single post
+
 export const getSinglePost = createAsyncThunk(
   'content/getSinglePost',
   async (postId, thunkAPI) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/posts/${postId}`,{
-        withCredentials: true,
-      });
+      const response = await authAxios.get(`${API_BASE_URL}/posts/${postId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -94,14 +102,13 @@ export const getSinglePost = createAsyncThunk(
   }
 );
 
-// Thunk to update a post
+
+
 export const updatePost = createAsyncThunk(
   'content/updatePost',
   async ({ postId, updates }, thunkAPI) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/posts/${postId}`, updates,{
-        withCredentials: true,
-      });
+      const response = await authAxios.put(`${API_BASE_URL}/posts/${postId}`, updates);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -109,14 +116,11 @@ export const updatePost = createAsyncThunk(
   }
 );
 
-// Thunk to delete a post
 export const deletePost = createAsyncThunk(
   'content/deletePost',
   async (postId, thunkAPI) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/posts/${postId}`,{
-        withCredentials: true,
-      });
+      const response = await authAxios.delete(`${API_BASE_URL}/posts/${postId}`);
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
@@ -124,25 +128,17 @@ export const deletePost = createAsyncThunk(
   }
 );
 
-// Thunk to logout a post
-export const logoutUser = createAsyncThunk(
-  "content/logoutUser",
-  async (_, thunkAPI) => {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/logout`, {}, { // ✅ Use POST instead of GET
-        withCredentials: true,
-      });
-
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data || error.message);
-    }
+export const logoutUser = createAsyncThunk("content/logoutUser", async (_, thunkAPI) => {
+  try {
+    localStorage.removeItem("authToken"); // ✅ Clear token from local storage
+    return { message: "User logged out successfully!" };
+  } catch (error) {
+    return thunkAPI.rejectWithValue("Logout failed.");
   }
-);
+});
 
 
 
-// Initial state
 const initialState = {
   user: null,
   userId: null,

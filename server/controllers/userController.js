@@ -20,10 +20,12 @@ const newUser = await User.create({
     image:fileUrl.content,
   });
   await newUser.save();
-  generateToken(newUser._id, res);
+  // generateToken(newUser._id, res);
+  const token = generateToken(newUser._id);
   res.json({
     message: "user Created",
     user: newUser,
+    token,
   });
 });
 
@@ -63,28 +65,30 @@ export const createPost = async (req, res) => {
     }
   };
 
+  
   export const loginUser = TryCatch(async (req, res) => {
     const { email } = req.body;
   
-    // Check if email is provided
     if (!email) {
       return res.status(400).json({ message: "Email is required" });
     }
   
-    // Find the user by email
     const user = await User.findOne({ email });
   
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    generateToken(user._id, res);
-    // Return the user details
+  
+    const token = generateToken(user._id);
+  
     res.status(200).json({
       message: "Login successful",
       user,
+      token, // Send token in response instead of setting it in a cookie
     });
   });
   
+
   export const myProfile = TryCatch(async (req, res) => {
     // console.log(req.user._id)
     const user = await User.findById(req.user._id);
